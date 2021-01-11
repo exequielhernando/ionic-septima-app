@@ -11,7 +11,7 @@ export class HomePage implements OnInit{
 
   mensajes: OSNotificationPayload [] = []; 
 
-  constructor(  private pushService: PushService,
+  constructor(  public pushService: PushService,
                 private applicationRef : ApplicationRef ) {}
 
   ngOnInit() {
