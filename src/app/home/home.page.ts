@@ -28,4 +28,10 @@ export class HomePage implements OnInit{
     
     this.mensajes = await this.pushService.getMensajes();
   }
+
+  async borrarMensajes() {
+
+    await this.pushService.borrarMensajes();
+    this.mensajes = [];
+  }
 }
