@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { OneSignal } from '@ionic-native/onesignal/ngx';
+import { OneSignal, OSNotification } from '@ionic-native/onesignal/ngx';
 
 
 @Injectable({
@@ -7,17 +7,27 @@ import { OneSignal } from '@ionic-native/onesignal/ngx';
 })
 export class PushService {
 
+  mensajes : any [] = [
+    {
+      title: 'Titulo de la push',
+      body: 'Este es el body de la push',
+      date: new Date()
+    }
+
+  ];
+
   constructor(  private oneSignal: OneSignal ) { }
 
   configuracionInicial () {
 
     this.oneSignal.startInit('973d3bc1-28a8-4006-bf5d-883e4ae3143c', '336238366162');
 
-    this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.InAppAlert);
+    this.oneSignal.inFocusDisplaying( this.oneSignal.OSInFocusDisplayOption.Notification  );
 
     this.oneSignal.handleNotificationReceived().subscribe(( noti ) => {
     // do something when notification is received
       console.log('Notificacion recibida', noti);
+      this.notificacionRecibida( noti );
     
     });
 
@@ -29,4 +39,18 @@ export class PushService {
 
     this.oneSignal.endInit();
   }
+
+  notificacionRecibida (  noti: OSNotification ) {
+
+    const payload = noti.payload;
+
+    const existePush = this.mensajes.find( mensaje => mensaje.notificationId === payload.notificationID );
+
+    if ( existePush ){
+      return;
+    }
+
+    this.mensajes.unshift( payload );
+  }
+
 }
